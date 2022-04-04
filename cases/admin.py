@@ -1,3 +1,3 @@
 from django.contrib import admin
+from .models import Case, CaseParametr
 
-# Register your models here.
