@@ -78,6 +78,7 @@ class CaseParametr(models.Model):
 # отображается только у студента
 class JobParam(models.Model):
     Case = models.ForeignKey(Case, on_delete=models.CASCADE)
+
     Param_Name = models.CharField('Наименование', max_length=50)
     Param_Help = models.CharField('Коментарий', max_length=1000)
     Param_TrueValue = models.BooleanField()
@@ -99,7 +100,6 @@ class Job(models.Model):
     Job_Title = models.CharField('Название работы', max_length=50)
     Starting_Date = models.DateTimeField('Дата начала работы')
     Job_Status = models.BooleanField('Статус выполнения работы')
-
     Job_is_evaluated = models.BooleanField('Работа оценена', default=False)
 
     class Meta:
