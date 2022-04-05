@@ -8,50 +8,6 @@ from cases.FormTable import CreateJobForm
 from cases.models import Job, Case, CaseParametr, DateParametr, JobParametr
 
 
-@login_required
-def edit(request, case_id):
-    #choices = Choice.objects.all()
-    case = Case.objects.get(id=case_id)
-    if case.jobparam_set.last().job_set.last().User == request.user:
-        dateparams = DateParametr.objects.all().filter(Case_id=case.id)
-        if request.method == "POST":
-            for param in dateparams.all():
-                param.Param_Value = request.POST.get("DateParam_" + str(param.id))
-                param.save()
-            for Param in CaseParametr.objects.filter(case_id=case.id).all():
-                nameparam = request.POST.get("Param_" + str(Param.id))
-                if nameparam:
-                    Param.Param_Name = request.POST.get("Param_" + str(Param.id))
-                    Param.save()
-            return HttpResponseRedirect('/cases')
-        #return render(request, 'cases/edit.html', {'case': case, 'choices': choices})
-        return render(request, 'cases/editcases.html', {'case': case})
-    else:
-        return HttpResponseRedirect('/')
-
-
-'''@login_required
-def case_param(request):
-    #if request.user.groups.filter(name="Преподаватель").exists():
-    if request.user.exists():
-        form = CaseParametr()
-        return render(request, 'cases/createtablecases.html', {'form': form})
-    return HttpResponseRedirect('/')'''
-
-
-# Таблица со всеми параметрами параметров кейса
-@login_required
-def alldateparams(request):
-    if request.user.groups.filter(name="Преподаватель").exists():
-        dateParametrs = DateParametr.objects.filter(Case__Is_Pattern=True)
-        for dateparam in dateParametrs:
-            if request.GET.get(str(dateparam.id)) != None:
-                dateparam.delete()
-                return render(request, 'cases/alldateparametrs.html', {'dateParams': dateParametrs})
-        return render(request, 'cases/alldateparametrs.html', {'dateParams': dateParametrs})
-    return HttpResponseRedirect('/')
-
-
 # Создание полноценного кейса с параметрами и разделами
 @login_required
 def createcase(request):
@@ -109,6 +65,63 @@ def createcase(request):
             return render(request, 'cases/createcases.html', {'form': form, 'sections': sections})'''
     else:
         return HttpResponseRedirect('/')
+
+
+@login_required
+def edit(request, case_id):
+    #choices = Choice.objects.all()
+    case = Case.objects.get(id=case_id)
+    if case.jobparam_set.last().job_set.last().User == request.user:
+        dateparams = DateParametr.objects.all().filter(Case_id=case.id)
+        if request.method == "POST":
+            for param in dateparams.all():
+                param.Param_Value = request.POST.get("DateParam_" + str(param.id))
+                param.save()
+            for Param in CaseParametr.objects.filter(case_id=case.id).all():
+                nameparam = request.POST.get("Param_" + str(Param.id))
+                if nameparam:
+                    Param.Param_Name = request.POST.get("Param_" + str(Param.id))
+                    Param.save()
+            return HttpResponseRedirect('/cases')
+        #return render(request, 'cases/edit.html', {'case': case, 'choices': choices})
+        return render(request, 'cases/editcases.html', {'case': case})
+    else:
+        return HttpResponseRedirect('/')
+
+
+'''@login_required
+def case_param(request):
+    #if request.user.groups.filter(name="Преподаватель").exists():
+    if request.user.exists():
+        form = CaseParametr()
+        return render(request, 'cases/createtablecases.html', {'form': form})
+    return HttpResponseRedirect('/')'''
+
+# Таблица со всеми параметрами кейса
+@login_required
+def allparamcases(request):
+    #if request.user.groups.filter(name="Преподаватель").exists():
+    if request.user.exists():
+        caseParametrs = CaseParametr.objects.filter(case__Is_Pattern=True)
+        for paramofcase in caseParametrs:
+            if request.GET.get(str(paramofcase.id)) != None:
+                paramofcase.delete()
+        return render(request, 'cases/allparametrcases.html', {'caseParametrs': caseParametrs})
+    return HttpResponseRedirect('/')
+
+
+# Таблица со всеми параметрами параметров кейса
+@login_required
+def alldateparams(request):
+    #if request.user.groups.filter(name="Преподаватель").exists():
+    if request.user.exists():
+        dateParametrs = DateParametr.objects.filter(Case__Is_Pattern=True)
+        for dateparam in dateParametrs:
+            if request.GET.get(str(dateparam.id)) != None:
+                dateparam.delete()
+                return render(request, 'cases/alldateparametrs.html', {'dateParametrs': dateParametrs})
+        return render(request, 'cases/alldateparametrs.html', {'dateParametrs': dateParametrs})
+    return HttpResponseRedirect('/')
 
 
 
