@@ -148,7 +148,7 @@ class Job(models.Model):
 
 
 # Файлы которые заагружает преподаватель к кейсу, доументация и прочее
-class UserFile(models.Model):
+'''class UserFile(models.Model):
     Job = models.ForeignKey(Job, on_delete=models.CASCADE)
     #User = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     File = models.FileField(upload_to='files/', max_length=100)
@@ -158,7 +158,7 @@ class UserFile(models.Model):
         verbose_name_plural = 'Файлы'
 
     def __str__(self):
-        return self.File.name
+        return self.File.name'''
 
 
 '''class GroupStud(models.Model):
