@@ -1,10 +1,132 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<!--{% extends 'base.html' %}-->
 
-</body>
-</html>
+{%load global_context%}
+
+{% block title %} Мои файлы {% endblock %}
+
+{% block content %}
+
+<h2> Формирование пакета исходных данных для анализа </h2>
+<div class="container">
+  <div class="row justify-content-md-cente border">
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <div class="container-fluid">
+            <form method="POST">
+            {%csrf_token%}
+            <br>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Предприятие:</span>
+                </div>
+                <input class="form-control"  type="text" name="Case_Name" maxlength="100" required="" id="id_Case_Name">
+              </div>
+              <br>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="">{{form.Case_Comment.label_tag}}</span>
+                </div>
+                <textarea class="form-control"  name="Case_Comment" maxlength="300" required="" id="id_Case_Comment"></textarea>
+              </div>
+            <br>
+
+               <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="inputGroupSelect01">Тип раздела</label>
+                </div>
+                <select  class="custom-select" name="selected" id="myInput" onchange="myFunction()">
+                {%for item in sections%}
+                  <option name="{{item.id}}"> {{item}} </option>
+                {%endfor%}
+                </select>
+              </div>
+
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="">Заголовок:</span>
+                </div>
+                <input class="form-control" type="text" name="Case_Header" maxlength="50" required="" id="id_Case_Header">
+              </div>
+
+              <div class ="form2">
+                Параметры:
+                <input name="Param" class="form-control" type="text" id="Param0" placeholder="Параметр" class="amount" required="">
+                <br>
+                <textarea name="Param_Comment" class="form-control" id="Case_Comment0" cols="18" rows="4"  title="Комментарий" placeholder="Комментарий" ></textarea>
+                <br>
+                <input  type="button" class = "add2" title="Добавить ещё один объект типа " value="Добавить"></input >
+              </div>
+
+              <div class ="form">
+                <input  class="form-control" type="number" name="Period" id="Period0" placeholder="Дата" class="amount" min="1900" max="2020" required="">
+                <input type="button" class = "add" title="Добавить ещё один объект типа " value="Добавить"></input >
+              </div>
+              <button type="submit"   > Сохранить </button>
+            </form>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+
+
+
+<script type="text/javascript"> 
+  x = 0;
+ var $add = document.getElementsByClassName('add')[0];
+ var $form = document.getElementsByClassName('form')[0];
+ var $add2 = document.getElementsByClassName('add2')[0];
+ var $form2 = document.getElementsByClassName('form2')[0];
+$add.addEventListener('click', function(event) {
+  date = new Date();
+
+  if(x < 6 ){
+  var $input = document.createElement('input');
+  $input.type = 'number';
+  $input.id = 'Period'+ x +'';
+  $input.name = 'Period';
+  $input.required = '';
+  $input.placeholder = 'Дата';
+  $input.classList.add('amount');
+  $input.min = 1900;
+  $input.classList.add("form-control");
+  $input.max = date.getFullYear();
+  $form.insertBefore($input, $add);
+  x++;
+
+}
+});
+y =1;
+$add2.addEventListener('click', function(event) {
+  date = new Date();
+
+  var $input2 = document.createElement('input');
+  $input2.type = 'text';
+  $input2.required = '';
+  $input2.id = 'Param'+ y +'';
+  $input2.name = 'Param';
+  $input2.classList.add("form-control");
+  $input2.placeholder = 'Параметр';
+  $input2.classList.add('amount');
+  $form2.insertBefore($input2, $add2);
+
+  var $br2 = document.createElement('br');
+  $form2.insertBefore($br2, $add2);
+
+  var $input3  = document.createElement('textarea');
+  $input3.cols = "18";
+  $input3.rows = "4";
+  $input3.title = "Комментарий";
+  $input3.placeholder="Комментарий";
+  $input3.name = 'Param_Comment';
+  $input3.classList.add("form-control");
+  $input3.id = "Param_Comment" + y;
+  $form2.insertBefore($input3, $add2);
+
+  var $br2 = document.createElement('br');
+  $form2.insertBefore($br2, $add2);
+  y++;
+});
+</script>
+
+{% endblock %}
